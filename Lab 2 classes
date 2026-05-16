@@ -1,0 +1,86 @@
+/* For this lab you will be using the following class.
+
+class Food {
+public:
+    Food(string name, int calories, vector<string> flavors);
+    int getCalorieCount();
+    bool hasFlavor(string flavor);
+    string name;
+private:
+    int calories;
+    vector<string> flavors;
+};
+
+Implement the constructor and both public methods for the Food class. getCalorieCount is a simple accessor.
+hasFlavor should search through the vector of flavors and return true if the input flavor is found, false if it is not.
+In main, construct 4 Food items of your choice.
+Add those Food items to a collection, either array or vector.
+Build a loop that prompts the user for a flavor. Within that loop check each food item to see if it has that flavor. 
+If it does, print out the Food item's name and calorie count. */
+
+//
+//  main.cpp
+//  cs132_classes
+//
+//  Created by Marina Murphy on 4/22/25.
+//
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Food {
+public:
+    Food(string name, int calories, vector<string> flavors){
+        this->name = name;
+        this->calories = calories;
+        this->flavors = flavors;
+    }
+    
+    int getCalorieCount(){
+        return calories;
+    }
+    
+    bool hasFlavor(string flavor){
+        for (string f : flavors) {
+            if (f == flavor) {
+                return true;
+            }
+        }
+        return false;
+    }
+    string name;
+    
+private:
+    int calories;
+    vector<string> flavors;
+};
+
+int main() {
+    Food orange("Orange", 45, {"sweet", "tart"});
+    Food honey("Honey", 64, {"sweet", "floral"});
+    Food apple("Apple", 95, {"sweet", "crisp"});
+    Food tomato("Tomato", 22, {"savory", "fresh"});
+    
+    vector<Food> foods = {orange, honey, apple, tomato};
+    string inputFlavor;
+    while (true) {
+        cout << "\nEnter a flavor to search for it: ";
+        cin >> inputFlavor;
+        
+        if (inputFlavor == "exit") break;
+        
+        bool found = false;
+        for (Food f : foods) {
+            if (f.hasFlavor(inputFlavor)) {
+                cout << f.name << "\n" << f.getCalorieCount() << " calories\n";
+                found = true;
+            }
+        }
+        if (!found){
+            cout << "No food with that flavor.\n";
+        }
+    }
+    
+    return 0;
+}
