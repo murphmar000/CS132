@@ -1,0 +1,86 @@
+/* This program will be a review of vectors, structures, pointers and file I/O.
+1)Download the input file named persons.txt Download persons.txt and place it in a directory that you can read from. 
+It contains information about 5 people -- the last 4 digits of SSN, the first name, last name, and email address -- with tabs '\t' separating the four fields.
+2)Produce a new Person struct definition to contain a person's info.
+3)Open the file input stream.
+4)Create a readPerson pass-by-reference function that takes the input file stream, reads each person's info into an vector of Person structs, and returns that vector
+5)In main, loop through the vector and print each Person to the console in this format: DYSON, DON:2222:ddson@hotmail.com (printf might make this a little easier) */
+
+/
+//  main.cpp
+//  vector_string_structs
+//
+//  Created by Marina Murphy on 4/17/25.
+//
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+//Person struct to contain a person's info
+struct Person {
+    int SSN;
+    string fName;
+    string lName;
+    string email;
+};
+
+vector<string> splitLine(const string& line, char delimiter) {
+    vector<string> tokens;
+    string token;
+    for (char ch : line) {
+        if (ch == delimiter) {
+            tokens.push_back(token);
+            token.clear();
+        } else {
+            token += ch;
+        }
+    }
+    tokens.push_back(token); // last field
+    return tokens;
+}
+
+//readperson
+vector<Person> readPerson(ifstream& input_file) {
+    // create a Person vector
+    vector<Person> people;
+    string line;
+    
+    // Read persons.txt input file (Format: SSN \t fname \t lname \t email \n)
+    while (getline(input_file, line)) {
+        vector<string> fields = splitLine(line, '\t');
+        // read file line by line
+        // read line column by column
+        // parse columns into a Person struct (0->SSN, 1->fname ...)
+        // add Person struct to Person vector
+        if (fields.size() == 4) {
+            Person p;
+            p.SSN = stoi(fields[0]);
+            p.fName = fields[1];
+            p.lName = fields[2];
+            p.email = fields[3];
+            people.push_back(p);
+        }
+    }
+    // return Person vector
+    return people;
+    }
+
+int main()
+{
+    // Specify the path to persons.txt
+    string filePath = "/Users/marina/xcode/vector_string_structs/vector_string_structs/persons.txt";
+    ifstream inputFile(filePath);
+    // Open the file input stream to persons.txt
+    vector<Person> persons = readPerson(inputFile);
+    inputFile.close();
+    // Call readPerson with the input file stream and get the Person vector
+    // Loop through the vector
+    // print each Person to the console
+    // format: DYSON, DON:2222:ddson@hotmail.com
+    for (const Person& p : persons) {
+        cout << p.lName << ", " << p.fName << ":" << p.SSN << ":" << p.email << endl;
+    }
+    return 0;
+}
