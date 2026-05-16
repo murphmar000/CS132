@@ -1,0 +1,54 @@
+/* This lab will be an extension of Lab 2.
+Update the Food class from Lab 2 such that it has a .h "header" interface file and a .cpp implementation file.
+Ensure the food constructor and internal functions use "this" for self reference.
+Overload the + operator for Food that allows two Food items to be combined. The combined food should have a new name, ie. Beans + Rice => Beans and Rice. 
+The combined food should also have the combined calories and flavors of the two Food items.
+Establish a "food" namespace in the Food.h and Food.cpp files.  The main file should the have a "using namespace food" directive. */
+
+//
+// main.cpp
+// Lab 5 Separate Compilation
+//
+// Created by Marina Murphy on 5/19/25.
+//
+
+#include <iostream>
+#include <vector>
+#include "Food.h"
+
+using namespace std;
+using namespace food;
+
+int main() {
+  Food orange("Orange", 45, {"sweet", "tart"});
+  Food honey("Honey", 64, {"sweet", "floral"});
+  Food apple("Apple", 95, {"sweet", "crisp"});
+  Food tomato("Tomato", 22, {"savory", "fresh"});
+
+  vector<Food> foods = {orange, honey, apple, tomato};
+  string inputFlavor;
+
+  while (true) {
+    cout << "\nEnter a flavor to search for it (or 'exit' to quit): ";
+    cin >> inputFlavor;
+
+    if (inputFlavor == "exit") break;
+
+    bool found = false;
+    for (const Food& f : foods) {
+      if (f.hasFlavor(inputFlavor)) {
+        cout << f.name << "\n" << f.getCalorieCount() << " calories\n";
+        found = true;
+      }
+    }
+    if (!found) {
+      cout << "No food with that flavor.\n";
+    }
+}
+
+  Food combined = orange + honey;
+  cout << "\nCombined Food: " << combined.name << " - " <<
+combined.getCalorieCount() << " calories\n";
+
+return 0;
+}
