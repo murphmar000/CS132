@@ -1,0 +1,114 @@
+/* This lab will rely on the Food class from the previous lab.
+
+For this lab we will construct a new class for a Recipe.
+
+A Recipe should consist of:
+a name
+number of servings
+multiple Food items, along with an amount for each of them
+a public method that calculates and returns the number of calories in a single serving
+a public method to print the recipe, displaying the name, servings and list of Food items with amounts
+
+Using this new Recipe class, construct a recipe for:
+
+"Mom's Spaghetti"
+Serves 6
+1 package Spaghetti Noodles (360 calories)
+3 whole Tomatoes (80 calories each)
+2 sprigs of Basil (10 calories each)
+1 chopped Yellow Onion (120 calories)
+1 minced Garlic Clove (20 calories)
+
+Call the display function to print the completed recipe as well as print the total calories per serving. */
+
+//
+//  main.cpp
+//  classes_cont.
+//
+//  Created by Marina Murphy on 4/30/25.
+//
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Food {
+public:
+    Food(string name, int calories){
+        this->name = name;
+        this->calories = calories;
+    }
+    
+    int getCalorieCount() const {
+        return calories;
+    }
+    
+    string getName() const {
+        return name;
+    }
+    
+public:
+    string name;
+    int calories;
+};
+
+struct Ingredient {
+    Food food;
+    int quantity;
+    
+    Ingredient(Food f, int q) : food(f), quantity(q) {}
+};
+
+class Recipe {
+public:
+    Recipe(string name, int servings) : name(name), servings(servings) {}
+    
+    void addIngredient (Food food, int quantity) {
+        ingredients.push_back(Ingredient(food, quantity));
+    }
+    
+    int totalCalories() const{
+        int total = 0;
+        for (const auto& ingredient : ingredients) {
+            total += ingredient.food.getCalorieCount() * ingredient.quantity;
+        }
+        return total;
+    }
+    
+    double caloriesPerServing() const{
+        return static_cast<double>(totalCalories()) / servings;
+    }
+    
+    void display () const {
+        cout << "Recipe: " << name << "\n";
+        cout << "Servings: " << servings << "\n";
+        cout << "Ingredients:\n";
+        for (const auto& ingredient : ingredients) {
+            cout << "-" << ingredient.quantity << " " << ingredient.food.getName() << " (" << ingredient.food.getCalorieCount() << " cal each)\n";
+        }
+    }
+public:
+    string name;
+    int servings;
+    vector<Ingredient> ingredients;
+};
+
+
+int main(){
+    Food spaghetti("Spaghetti Noodles", 360);
+    Food tomato("Tomato", 80);
+    Food basil("Basil", 10);
+    Food onion("Yellow Onion", 120);
+    Food garlic("Garlic Clove", 20);
+    
+    Recipe momsSpaghetti("Mom's Spaghetti", 6);
+    momsSpaghetti.addIngredient(spaghetti, 1);
+    momsSpaghetti.addIngredient(tomato, 3);
+    momsSpaghetti.addIngredient(basil, 2);
+    momsSpaghetti.addIngredient(onion, 1);
+    momsSpaghetti.addIngredient(garlic, 1);
+    
+    momsSpaghetti.display();
+    cout << "Calories per serving: " << momsSpaghetti.caloriesPerServing() << "\n";
+    return 0;
+}
