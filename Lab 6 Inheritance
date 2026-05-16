@@ -1,0 +1,119 @@
+/* For this lab we will create a variety of structs and classes and use those as the basis for novel classes.
+
+We will need the follow classes created:
+
+Character
+* This should be a purely Abstract class, consisting only of virtual functions.
+- void print(); // should print realName, jobTitle, name, superPowers and weakness.
+- string getSecretIdentity(); // should return realName.
+
+Person
+- string realName;
+- string jobTitle;
+
+Hero
+- string name;
+- []string superPowers;
+- string weakness;
+
+Villain
+- string name;
+- []string superPowers;
+- string weakness;
+
+Using different combinations of these classes, create a hero and a villain and call display for them.
+ex) class Hero: public Character, public Person { ... } */
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Character {
+public:
+    virtual void print() const = 0;
+    virtual string getSecretIdentity() const = 0;
+    virtual ~Character() {}
+};
+
+struct Person {
+    string realName;
+    string jobTitle;
+};
+
+struct Hero {
+    string name;
+    vector <string> superPowers;
+    string weakness;
+};
+
+struct Villain {
+    string name;
+    vector <string> superPowers;
+    string weakness;
+};
+
+class HeroCharacter : public Character, public Person, public Hero {
+public:
+    HeroCharacter(string realName, string jobTitle, string name, vector<string> powers, string weakness) {
+        this->realName = realName;
+        this->jobTitle = jobTitle;
+        this->name = name;
+        this->superPowers = powers;
+        this->weakness = weakness;
+    }
+    
+    void print() const override {
+        cout << "Real Name: " << realName;
+        cout << "Job Title: " << jobTitle;
+        cout << "Hero Name: " << name;
+        cout << "Superpowers: ";
+        for (const auto& power : superPowers) {
+            cout << power << ",";
+        }
+        cout << "\nWeakness: " << weakness;
+    }
+    string getSecretIdentity() const override {
+        return realName;
+    }
+};
+
+class VillainCharacter : public Character, public Person, public Villain {
+public:
+    VillainCharacter(string realName, string jobTitle, string name, vector<string> powers, string weakness) {
+        this->realName = realName;
+        this->jobTitle = jobTitle;
+        this->name = name;
+        this->superPowers = powers;
+        this->weakness = weakness;
+    }
+    
+    void print() const override{
+        cout << "Real Name: " << realName;
+        cout << "Job Title: " << jobTitle;
+        cout << "Villain Name: " << name;
+        cout << "Superpowers: ";
+        for (const auto& power : superPowers) {
+            cout << power << ",";
+        }
+        cout << "\nWeakness: " << weakness;
+    }
+    string getSecretIdentity() const override {
+        return realName;
+    }
+};
+
+int main() {
+    HeroCharacter hero(
+                       "Bruce Wayne", "Rich Guy", "Batman", {"Money", "Gadgets", "Martial Arts"}, "Guns");
+    VillainCharacter villain(
+                             "Unknown", "Comedian", "Joker", {"Comedy", "Narcissism"}, "Batman");
+    
+    Character* characters[2] = { &hero, &villain };
+    
+    for (int i = 0; i < 2; ++i) {
+        characters[i]->print();
+        cout << "Secret Identity: " << characters[i]->getSecretIdentity();
+    }
+    return 0;
+}
